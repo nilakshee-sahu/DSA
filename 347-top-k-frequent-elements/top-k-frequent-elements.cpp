@@ -4,25 +4,23 @@ public:
 
         if(nums.empty()) return {};
 
-        unordered_map<int, int> mp;
+        unordered_map<int, int> freq;
         vector<int> ans;
 
         for(int num: nums){
-            mp[num]++;
+            freq[num]++;
         }
 
-        int maxi = 0;
-        int key;
-        for(int i=1; i<=k; i++){
-            for(auto &p: mp){
-                if(p.second > maxi){
-                    maxi = p.second;
-                    key = p.first;
-                }  
+        vector<vector<int>> buckets(nums.size()+1);
+        for(auto &p : freq) {
+            buckets[p.second].push_back(p.first);
+        }
+
+        for(int i= buckets.size()-1; i>=0 && ans.size()<k; i--){
+            for(int num : buckets[i]) {
+                ans.push_back(num);
+                if(ans.size() == k) break;
             }
-            ans.push_back(key);
-            maxi = 0;
-            mp.erase(key);
         }
         return ans;
     }
