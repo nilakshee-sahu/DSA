@@ -1,48 +1,47 @@
 class Solution {
 public:
-    vector<int> searchRange(vector<int>& nums, int target) {
-        if(nums.empty()) return {-1, -1};
-
-        int n = nums.size();
+    int lowerBound (vector<int>& nums, int n, int target) {
         int low = 0, high = n-1;
-        int first = -1, last = -1;
-
-        // For finding first occurrence
+        int first = n;
         while (low <= high) {
             int mid = low + (high - low)/2;
-
-            if (nums[mid] == target) {
+            if (nums[mid] >= target) {
                 first = mid;
                 high = mid - 1; 
-            }
-            else if (nums[mid] > target) {
-                high = mid - 1;
             }
             else {
                 low = mid + 1;
             }
         }
+        return first;
+    }
 
-        // For finding last occurrence
-        low = 0; high = n-1;
+    int upperBound (vector<int>& nums, int n, int target) {
+        int low = 0, high = n-1;
+        int last = n;
         while (low <= high) {
             int mid = low + (high - low)/2;
-
-            if (nums[mid] == target) {
+            if (nums[mid] > target) {
                 last = mid;
-                low = mid+1;
+                high = mid - 1; 
             }
-            else if (nums[mid] < target) {
-                last = mid;
-                low = mid+1;
+            else {
+                low = mid + 1;
             }
-            else{
-                high = mid-1;
-            }
-               
         }
+        return last;
+    }
+    
+    vector<int> searchRange(vector<int>& nums, int target) {
+        if(nums.empty()) return {-1, -1};
+        int n = nums.size();
+        
+        int lb = lowerBound(nums, n, target); 
+        int up = upperBound(nums, n, target);
 
-        if(first == -1 ) return {-1, -1};
-        return {first, last};
+        if(lb == n || nums[lb] != target)
+            return {-1, -1};
+
+        return {lb, up-1};
     }
 };
