@@ -13,7 +13,7 @@ public:
             st.push(value);
         }
         else{
-            if(value > mini)
+            if(value >= mini)
                 st.push(value);
             else{
                 st.push(2LL*value-mini);
