@@ -11,25 +11,24 @@
  */
 class Solution {
 public:
-    TreeNode* solve(vector<int> preorder, int mini, int maxi, int &i, int size){
-        // base case
-        if(i >= size)
-            return NULL;
-        if(preorder[i] < mini || preorder[i] > maxi)
-            return NULL;
-            
-        TreeNode* root = new TreeNode(preorder[i++]);
-        root->left = solve(preorder, mini, root->val, i, size);
-        root->right = solve(preorder, root->val, maxi, i, size);
+    TreeNode* insert(TreeNode* root, int data){
+        if(root == NULL)
+            return new TreeNode(data);
         
+        if(data < root->val)
+            root->left = insert(root->left, data);
+        else
+            root->right = insert(root->right, data);
+
         return root;
     }
+
     TreeNode* bstFromPreorder(vector<int>& preorder) {
-        int mini = INT_MIN;
-        int maxi = INT_MAX;
-        
-        int i = 0;
-        int size = preorder.size();
-        return solve(preorder, mini, maxi, i, size);
+        TreeNode* root = NULL;
+        for(int data: preorder){
+            root = insert(root, data);
+        }
+
+        return root;
     }
 };
